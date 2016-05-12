@@ -57,10 +57,10 @@ namespace pis_doc_generator
                     foreach (XmlNode parameter in parameters)
                     {
                         if (parameter.SelectSingleNode("./parameterType")?.InnerText == "1")
-                            input += "\n\t\t" + parameter.Attributes?["name"].Value + " - " +
+                            input += Environment.NewLine + "\t\t" + parameter.Attributes?["name"].Value + " - " +
                                 GetTypeName(Path.GetDirectoryName(file) + parameter.SelectSingleNode("classId")?.InnerText + ".xml");
                         else
-                            output += "\n\t\t" + parameter.Attributes?["name"].Value + " - " +
+                            output += Environment.NewLine + "\t\t" + parameter.Attributes?["name"].Value + " - " +
                                 GetTypeName(Path.GetDirectoryName(file) + parameter.SelectSingleNode("classId")?.InnerText + ".xml");
                     }
 
