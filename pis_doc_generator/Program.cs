@@ -25,6 +25,17 @@ namespace pis_doc_generator
             sw.Flush();
         }
 
+        string GetTypeName(string file)
+        {
+            if (!File.Exists(file))
+                return "unknown";
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(file);
+            string name = doc.SelectSingleNode("/teamworks/twClass")?.Attributes?["name"].Value;
+            return name ?? "unknown";
+        }
+
         void Process(string file)
         {
             XmlDocument doc = new XmlDocument();
@@ -41,18 +52,20 @@ namespace pis_doc_generator
                 XmlNodeList parameters;
                 if ((parameters = process.SelectNodes("./processParameter")) != null)
                 {
-                    string input = "Vstup: ";
-                    string output = "Výstup: ";
+                    string input = "Vstup:";
+                    string output = "Výstup:";
                     foreach (XmlNode parameter in parameters)
                     {
                         if (parameter.SelectSingleNode("./parameterType")?.InnerText == "1")
-                            input += parameter.Attributes?["name"].Value + ", ";
+                            input += "\n\t\t" + parameter.Attributes?["name"].Value + " - " +
+                                GetTypeName(Path.GetDirectoryName(file) + parameter.SelectSingleNode("classId")?.InnerText + ".xml");
                         else
-                            output += parameter.Attributes?["name"].Value + ", ";
+                            output += "\n\t\t" + parameter.Attributes?["name"].Value + " - " +
+                                GetTypeName(Path.GetDirectoryName(file) + parameter.SelectSingleNode("classId")?.InnerText + ".xml");
                     }
 
-                    Write(Regex.Replace(input, ", $", ""), 1);
-                    Write(Regex.Replace(output, ", $", ""), 1);
+                    Write(input, 1);
+                    Write(output, 1);
                     Write("", 0);
                 }
 
@@ -83,14 +96,16 @@ namespace pis_doc_generator
                                 {
                                     Write("Vstupy: ", 2);
                                     foreach (XmlNode parameter in wsParameters)
-                                        Write(parameter.SelectSingleNode("./name")?.InnerText, 3);
+                                        Write(parameter.SelectSingleNode("./name")?.InnerText + " - " +
+                                            Regex.Replace(parameter.SelectSingleNode("./type")?.InnerText ?? "unknown", "^{.*}", ""), 3);
                                 }
 
                                 if ((wsParameters = wsDef.SelectNodes("/config/outputParameters/parameter")) != null)
                                 {
                                     Write("Výstupy: ", 2);
                                     foreach (XmlNode parameter in wsParameters)
-                                        Write(parameter.SelectSingleNode("./name")?.InnerText, 3);
+                                        Write(parameter.SelectSingleNode("./name")?.InnerText + " - " +
+                                            Regex.Replace(parameter.SelectSingleNode("./type")?.InnerText ?? "unknown", "^{.*}", ""), 3);
                                 }
                                 break;
                             case "Switch":
