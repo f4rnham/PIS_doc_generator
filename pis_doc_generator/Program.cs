@@ -128,7 +128,7 @@ namespace pis_doc_generator
                 Directory.Delete(tempDir, true);
 
             ZipFile.ExtractToDirectory(file, tempDir);
-            return tempDir + Path.DirectorySeparatorChar + "objects";
+            return tempDir;
         }
 
         static void Main(string[] args)
@@ -140,7 +140,7 @@ namespace pis_doc_generator
             }
 
             string path = UnpackFile(args[0]);
-            var files = Directory.EnumerateFiles(path, "*.xml", SearchOption.AllDirectories);
+            var files = Directory.EnumerateFiles(path + Path.DirectorySeparatorChar + "objects", "*.xml", SearchOption.AllDirectories);
 
             Program me = new Program(Regex.Replace(args[0], "\\.twx$", ".txt"));
 
@@ -149,6 +149,9 @@ namespace pis_doc_generator
                 Console.WriteLine("Processing file {0}...", f);
                 me.Process(f);
             }
+
+            if (Directory.Exists(path) && !System.Diagnostics.Debugger.IsAttached)
+                Directory.Delete(path, true);
         }
     }
 }
