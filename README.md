@@ -8,7 +8,7 @@ Documentation skeleton generator tool for students of Principles of Information 
 ## Usage
 
 1. Export project as .twx file.
-2. Pass generated file as command line argument to this tool (or simply drag and drop it on compiled binary).
+2. Pass path to exported file as command line argument to this tool (or simply drag and drop it on compiled binary).
 3. Generated text can be found in folder with original .twx file with .txt extension.
 
 ## Example of output
