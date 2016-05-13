@@ -30,8 +30,8 @@ Get loans data - systémová úloha
         Výstupy:
             loanRecordsAfterReturnDate - ArrayOfLoanRecordsAfterReturnDate
     Skript: Increase book index
-		Skript: Copy loan records
-		Rozhodovací blok: Has all loan record data?
+    Skript: Copy loan records
+    Rozhodovací blok: Has all loan record data?
 ```
 
 ## Known issues
